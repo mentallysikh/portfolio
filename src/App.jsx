@@ -92,7 +92,7 @@ export default function FuturePortfolio() {
             
             {/* DOWNLOAD RESUME BUTTON - UPDATED LINK */}
             <a 
-              href="/Resume - Randeep Arora - Updated.pdf" 
+              href="resume.pdf" 
               download
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-medium transition-all shadow-lg hover:shadow-blue-500/25"
             >
