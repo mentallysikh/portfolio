@@ -51,7 +51,7 @@ const SUGGESTIONS = [
 
 // ─── Paste your FREE Gemini API key here ─────────────────────────────────────
 // Get one free at: https://aistudio.google.com → API Keys → Create API Key
-const GEMINI_KEY = "AIzaSyDlRa4YDNoYBuXIyIxaVisQ6P538tdu4vE";
+const GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY;
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Uses gemini-2.5-flash — free tier: 10 RPM, 250 RPD
