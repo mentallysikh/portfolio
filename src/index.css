@@ -1,7 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
+:root {
+  --cyan: #22d3ee;
+  --emerald: #34d399;
+  --zinc-950: #09090b;
+  --zinc-900: #18181b;
+  --zinc-800: #27272a;
+}
+
+* {
   scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--zinc-950);
+  font-family: 'Space Mono', monospace;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Syne', sans-serif;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Scanline effect */
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* Glitch text animation */
+@keyframes glitch {
+  0%, 100% { clip-path: inset(0 0 98% 0); transform: translate(-2px, 0); }
+  20% { clip-path: inset(40% 0 50% 0); transform: translate(2px, 0); }
+  40% { clip-path: inset(70% 0 15% 0); transform: translate(-2px, 0); }
+  60% { clip-path: inset(20% 0 70% 0); transform: translate(2px, 0); }
+  80% { clip-path: inset(85% 0 5% 0); transform: translate(-1px, 0); }
+}
+
+@keyframes glitch2 {
+  0%, 100% { clip-path: inset(0 0 98% 0); transform: translate(2px, 0); }
+  20% { clip-path: inset(60% 0 30% 0); transform: translate(-2px, 0); }
+  40% { clip-path: inset(10% 0 80% 0); transform: translate(2px, 0); }
+  60% { clip-path: inset(80% 0 5% 0); transform: translate(-2px, 0); }
+  80% { clip-path: inset(30% 0 60% 0); transform: translate(1px, 0); }
+}
+
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  font-family: 'Syne', sans-serif;
+}
+.glitch::before {
+  color: #22d3ee;
+  animation: glitch 4s infinite linear;
+  opacity: 0.6;
+}
+.glitch::after {
+  color: #34d399;
+  animation: glitch2 4s infinite linear;
+  opacity: 0.6;
+}
+
+/* Terminal cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor::after {
+  content: '_';
+  animation: blink 1s infinite;
+  color: #22d3ee;
+}
+
+/* Fade up animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  animation: fadeUp 0.7s ease forwards;
+}
+
+/* Section reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tag / badge */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-family: 'Space Mono', monospace;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.06);
+  letter-spacing: 0.05em;
+}
+
+/* Card hover */
+.card-hover {
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 20px 40px rgba(34, 211, 238, 0.08);
+}
+
+/* Skill bar */
+@keyframes barFill {
+  from { width: 0; }
+}
+.skill-bar {
+  animation: barFill 1.2s ease forwards;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #22d3ee44;
+  border-radius: 2px;
+}
+
+/* Section label style */
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: #22d3ee;
+  text-transform: uppercase;
+}
+
+/* Neon border */
+.neon-border {
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  box-shadow: inset 0 0 30px rgba(34, 211, 238, 0.03), 0 0 0 1px rgba(34, 211, 238, 0.05);
+}
+
+/* Typing animation */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Number counter animation */
+@keyframes countUp {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
