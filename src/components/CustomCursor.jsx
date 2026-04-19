@@ -1,92 +1,80 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function CustomCursor({ theme }) {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const [clicking, setClicking] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const pos = useRef({ x: -100, y: -100 });
-  const ring = useRef({ x: -100, y: -100 });
+  const dot   = useRef(null);
+  const ring  = useRef(null);
+  const pos   = useRef({ x: 0, y: 0 });
+  const ring_ = useRef({ x: 0, y: 0 });
+  const raf   = useRef(null);
 
   useEffect(() => {
+    const isDark = theme === "dark";
+    const color = isDark ? "#00f5ff" : "#0077b6";
+
     const move = (e) => {
       pos.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      if (dot.current) {
+        dot.current.style.left = e.clientX + "px";
+        dot.current.style.top  = e.clientY + "px";
       }
     };
 
-    let raf;
-    const followRing = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.12;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.12;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px)`;
+    const down  = () => { dot.current?.classList.add("scale-[2]"); ring.current?.classList.add("scale-150"); };
+    const up    = () => { dot.current?.classList.remove("scale-[2]"); ring.current?.classList.remove("scale-150"); };
+    const enter = () => { ring.current && (ring.current.style.width = "48px", ring.current.style.height = "48px"); };
+    const leave = () => { ring.current && (ring.current.style.width = "28px", ring.current.style.height = "28px"); };
+
+    const links = document.querySelectorAll("a, button");
+    links.forEach((l) => { l.addEventListener("mouseenter", enter); l.addEventListener("mouseleave", leave); });
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const loop = () => {
+      ring_.current.x = lerp(ring_.current.x, pos.current.x, 0.12);
+      ring_.current.y = lerp(ring_.current.y, pos.current.y, 0.12);
+      if (ring.current) {
+        ring.current.style.left = ring_.current.x + "px";
+        ring.current.style.top  = ring_.current.y + "px";
       }
-      raf = requestAnimationFrame(followRing);
+      raf.current = requestAnimationFrame(loop);
     };
-    followRing();
-
-    const onDown = () => setClicking(true);
-    const onUp = () => setClicking(false);
-
-    const onEnterLink = (e) => {
-      if (e.target.closest("a, button, [data-hover]")) setHovering(true);
-    };
-    const onLeaveLink = (e) => {
-      if (e.target.closest("a, button, [data-hover]")) setHovering(false);
-    };
+    raf.current = requestAnimationFrame(loop);
 
     window.addEventListener("mousemove", move);
-    window.addEventListener("mousedown", onDown);
-    window.addEventListener("mouseup", onUp);
-    window.addEventListener("mouseover", onEnterLink);
-    window.addEventListener("mouseout", onLeaveLink);
+    window.addEventListener("mousedown", down);
+    window.addEventListener("mouseup",   up);
 
     return () => {
-      cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", move);
-      window.removeEventListener("mousedown", onDown);
-      window.removeEventListener("mouseup", onUp);
-      window.removeEventListener("mouseover", onEnterLink);
-      window.removeEventListener("mouseout", onLeaveLink);
+      window.removeEventListener("mousedown", down);
+      window.removeEventListener("mouseup",   up);
+      links.forEach((l) => { l.removeEventListener("mouseenter", enter); l.removeEventListener("mouseleave", leave); });
+      cancelAnimationFrame(raf.current);
     };
-  }, []);
+  }, [theme]);
 
   const isDark = theme === "dark";
-  const accent = isDark ? "#22d3ee" : "#0891b2";
+  const c = isDark ? "#00f5ff" : "#0077b6";
 
   return (
     <>
-      {/* Dot */}
       <div
-        ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
+        ref={dot}
+        className="fixed z-[9999] pointer-events-none transition-transform duration-100"
         style={{
-          width: clicking ? 6 : 8,
-          height: clicking ? 6 : 8,
-          marginLeft: clicking ? -3 : -4,
-          marginTop: clicking ? -3 : -4,
-          borderRadius: "50%",
-          backgroundColor: accent,
-          transition: "width 0.15s, height 0.15s",
-          willChange: "transform",
+          width: 6, height: 6, borderRadius: "50%",
+          background: c,
+          transform: "translate(-50%, -50%)",
+          boxShadow: `0 0 8px ${c}`,
         }}
       />
-      {/* Ring */}
       <div
-        ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9998]"
+        ref={ring}
+        className="fixed z-[9998] pointer-events-none transition-all duration-200"
         style={{
-          width: hovering ? 44 : clicking ? 24 : 32,
-          height: hovering ? 44 : clicking ? 24 : 32,
-          marginLeft: hovering ? -22 : clicking ? -12 : -16,
-          marginTop: hovering ? -22 : clicking ? -12 : -16,
-          borderRadius: "50%",
-          border: `1px solid ${accent}`,
-          opacity: hovering ? 0.8 : 0.4,
-          transition: "width 0.25s, height 0.25s, opacity 0.25s, margin 0.25s",
-          willChange: "transform",
+          width: 28, height: 28, borderRadius: "50%",
+          border: `1px solid ${c}`,
+          transform: "translate(-50%, -50%)",
+          opacity: 0.6,
         }}
       />
     </>

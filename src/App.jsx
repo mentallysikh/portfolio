@@ -1,42 +1,35 @@
 import { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Skills from "./components/Skills";
-import Experience from "./components/Experience";
-import Projects from "./components/Projects";
-import Certifications from "./components/Certifications";
-import Blog from "./components/Blog";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
-import ParticleField from "./components/ParticleField";
-import CustomCursor from "./components/CustomCursor";
-import ScrollProgress from "./components/ScrollProgress";
-import AIChatbot from "./components/AIChatbot";
+import Navbar          from "./components/Navbar";
+import Hero            from "./components/Hero";
+import About           from "./components/About";
+import Skills          from "./components/Skills";
+import Experience      from "./components/Experience";
+import Projects        from "./components/Projects";
+import Certifications  from "./components/Certifications";
+import Blog            from "./components/Blog";
+import Contact         from "./components/Contact";
+import Footer          from "./components/Footer";
+import ParticleField   from "./components/ParticleField";
+import CustomCursor    from "./components/CustomCursor";
+import ScrollProgress  from "./components/ScrollProgress";
+import AIChatbot       from "./components/AIChatbot";
 import "./index.css";
+import { MessageCircle } from "lucide-react";
 
-import { MessageCircle, X } from "lucide-react";
+const SECTIONS = ["home","about","skills","experience","projects","certifications","contact"];
 
 export default function App() {
-  const [theme, setTheme] = useState("dark");
+  const [theme,         setTheme]         = useState("dark");
   const [activeSection, setActiveSection] = useState("home");
-  const [scrollY, setScrollY] = useState(0);
-  const [chatOpen, setChatOpen] = useState(false);
-  const [entered, setEntered] = useState(false);
-
+  const [scrollY,       setScrollY]       = useState(0);
+  const [chatOpen,      setChatOpen]      = useState(false);
+  const [blogOpen,      setBlogOpen]      = useState(false);
+  const [entered,       setEntered]       = useState(false);
   const isDark = theme === "dark";
 
-  // Page enter animation
-  useEffect(() => {
-    const t = setTimeout(() => setEntered(true), 50);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Theme persistence
-  useEffect(() => {
-    const saved = localStorage.getItem("ra-theme") || "dark";
-    setTheme(saved);
-  }, []);
+  useEffect(() => { const t = setTimeout(() => setEntered(true), 60); return () => clearTimeout(t); }, []);
+  useEffect(() => { const saved = localStorage.getItem("ra-theme") || "dark"; setTheme(saved); }, []);
+  useEffect(() => { document.documentElement.classList.toggle("light-mode", theme === "light"); }, [theme]);
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -44,83 +37,64 @@ export default function App() {
     localStorage.setItem("ra-theme", next);
   };
 
-  // Scroll tracking
   useEffect(() => {
-    const handleScroll = () => {
+    const onScroll = () => {
       setScrollY(window.scrollY);
-      const sections = ["home", "about", "skills", "experience", "projects", "certifications", "blog", "contact"];
-      for (const id of sections) {
+      for (const id of SECTIONS) {
         const el = document.getElementById(id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 120 && rect.bottom >= 120) {
-            setActiveSection(id);
-            break;
-          }
+          if (rect.top <= 130 && rect.bottom >= 130) { setActiveSection(id); break; }
         }
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const bgClass = isDark
-    ? "bg-zinc-950 text-zinc-100"
-    : "bg-slate-100 text-zinc-900";
-
   return (
-    <div className={`${bgClass} ${isDark ? "dark" : "light"} min-h-screen font-mono overflow-x-hidden transition-colors duration-500`}>
-      {/* Custom cursor */}
+    <div className="min-h-screen overflow-x-hidden noise-bg transition-colors duration-500"
+      style={{ background: "var(--bg-0)", color: "var(--text-1)" }}>
+
       <CustomCursor theme={theme} />
-
-      {/* Scroll progress */}
-      <ScrollProgress theme={theme} />
-
-      {/* Particle field */}
+      <ScrollProgress />
       <ParticleField theme={theme} />
+      <div className="fixed inset-0 grid-bg pointer-events-none z-0" />
+      <div className="orb orb-1 z-0" />
+      <div className="orb orb-2 z-0" />
+      <div className="orb orb-3 z-0" />
 
-      {/* Grid background */}
-      <div className="fixed inset-0 pointer-events-none z-0 grid-bg opacity-30" />
-
-      {/* Glow orbs */}
-      {isDark && (
-        <>
-          <div className="fixed top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-cyan-500/8 blur-[120px] pointer-events-none z-0" />
-          <div className="fixed bottom-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-emerald-500/6 blur-[100px] pointer-events-none z-0" />
-        </>
-      )}
-
-      <Navbar active={activeSection} scrollY={scrollY} theme={theme} toggleTheme={toggleTheme} />
+      <Navbar
+        active={activeSection} scrollY={scrollY}
+        theme={theme} toggleTheme={toggleTheme}
+        onBlogOpen={() => setBlogOpen(true)}
+      />
 
       <main className={`relative z-10 ${entered ? "page-enter" : "opacity-0"}`}>
-        <Hero theme={theme} />
-        <About theme={theme} />
-        <Skills theme={theme} />
-        <Experience theme={theme} />
-        <Projects theme={theme} />
+        <Hero         theme={theme} />
+        <About        theme={theme} />
+        <Skills       theme={theme} />
+        <Experience   theme={theme} />
+        <Projects     theme={theme} />
         <Certifications theme={theme} />
-        <Blog theme={theme} />
-        <Contact theme={theme} />
+        <Contact      theme={theme} />
       </main>
 
       <Footer theme={theme} />
 
-      {/* AI Chat button */}
+      {/* Blog drawer */}
+      <Blog theme={theme} open={blogOpen} onClose={() => setBlogOpen(false)} />
+
+      {/* AI chat */}
       {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          className={`fixed bottom-6 right-6 z-[199] flex items-center gap-2 px-4 py-3 font-mono text-sm font-bold transition-all duration-200 chat-pulse ${
-            isDark
-              ? "bg-cyan-400 text-zinc-950 hover:bg-cyan-300"
-              : "bg-cyan-600 text-white hover:bg-cyan-700"
-          }`}
+          className="fixed bottom-6 right-6 z-[199] flex items-center gap-2 px-4 py-3 text-sm font-bold mono transition-all duration-200 chat-pulse"
+          style={{ background: "var(--cyan)", color: "var(--bg-0)", border: "1px solid var(--cyan)", boxShadow: "0 0 20px rgba(0,245,255,0.25)" }}
         >
-          <MessageCircle size={16} />
-          Ask AI
+          <MessageCircle size={15} /> Ask AI
         </button>
       )}
-
-      {/* AI Chatbot */}
       {chatOpen && <AIChatbot theme={theme} onClose={() => setChatOpen(false)} />}
     </div>
   );

@@ -1,89 +1,136 @@
 import { useReveal, SectionHeader } from "./useReveal";
-import { Briefcase, ChevronRight } from "lucide-react";
+import { Briefcase, MapPin, Calendar, ChevronRight } from "lucide-react";
 
 const experiences = [
   {
-    company: "CloudKeeper",
     role: "DevOps Trainee",
+    company: "CloudKeeper",
     period: "2026 – Present",
-    type: "Full-Time",
+    location: "New Delhi, India",
+    type: "Full-time",
     current: true,
+    color: "#00f5ff",
     bullets: [
-      "Working with AWS and GCP services including compute, storage, and identity management",
-      "Applying cloud environment setup and deployment concepts in practical scenarios",
+      "Working with AWS and GCP services including compute (EC2), storage (S3), and identity management (IAM)",
+      "Applying cloud environment setup and deployment concepts in practical production scenarios",
       "Gaining hands-on exposure to Docker containerization and Kubernetes orchestration basics",
-      "Understanding and working with CI/CD pipelines, version control, and deployment workflows",
+      "Understanding and operating CI/CD pipelines, version control workflows, and deployment automation",
       "Assisting in infrastructure configuration and cloud-based application support",
       "Developing familiarity with scalable architecture and cloud best practices",
     ],
-    tags: ["AWS", "GCP", "Docker", "Kubernetes", "CI/CD", "Linux"],
+    tags: ["AWS", "GCP", "Docker", "Kubernetes", "CI/CD", "Linux", "IAM"],
   },
   {
-    company: "Amazon.com",
     role: "Virtual Assistant",
+    company: "Amazon.com",
     period: "Sep 2024 – May 2025",
+    location: "Remote",
     type: "Contract",
     current: false,
+    color: "#00ff88",
     bullets: [
-      "Acted as first point of contact for customer queries on orders, payments, and navigation",
-      "Provided tailored resolutions using CRM and internal tools with high professionalism",
-      "Used internal tools on Linux-based environments and followed documented workflows",
+      "Provided customer support using CRM tools and Linux-based internal systems",
+      "Managed high-volume query resolution with focus on accuracy and speed",
+      "Worked with internal tooling to track and resolve escalations efficiently",
     ],
-    tags: ["CRM", "Linux", "Customer Support", "Documentation"],
+    tags: ["CRM", "Linux", "Customer Support", "Ticketing"],
   },
   {
-    company: "Appflix Studios",
     role: "Front-End Developer Intern",
+    company: "Appflix Studios",
     period: "Aug 2023 – Oct 2023",
+    location: "New Delhi, India",
     type: "Internship",
     current: false,
+    color: "#b97cff",
     bullets: [
-      "Led front-end redesign efforts for a startup portal improving speed and user experience",
-      "Redesigned and developed responsive web interfaces using HTML, CSS, and JavaScript",
-      "Improved website performance, layout consistency, and mobile responsiveness",
+      "Built and optimized responsive web pages using HTML5, CSS3, and JavaScript",
+      "Led a full UI/UX redesign of the studio's main website, improving mobile experience",
+      "Collaborated with the design team to translate Figma mockups into pixel-perfect code",
     ],
-    tags: ["HTML", "CSS", "JavaScript", "UI/UX", "Responsive Design"],
+    tags: ["HTML5", "CSS3", "JavaScript", "Responsive Design", "UI/UX"],
   },
 ];
 
-function ExperienceCard({ exp, delay }) {
+function ExpCard({ exp, delay, theme }) {
   const ref = useReveal();
+  const isDark = theme === "dark";
 
   return (
-    <div ref={ref} className="reveal" style={{ transitionDelay: `${delay}s` }}>
-      <div className={`neon-border bg-zinc-900/50 p-6 card-hover ${exp.current ? "border-cyan-400/30" : ""}`}>
-        {/* Header */}
-        <div className="flex flex-wrap items-start justify-between gap-3 mb-5">
-          <div className="flex items-center gap-3">
-            <div className={`w-9 h-9 flex items-center justify-center border ${exp.current ? "border-cyan-400/50 bg-cyan-400/10" : "border-zinc-700 bg-zinc-800"}`}>
-              <Briefcase size={14} className={exp.current ? "text-cyan-400" : "text-zinc-500"} />
-            </div>
-            <div>
-              <h3 className="text-zinc-100 font-bold text-base">{exp.role}</h3>
-              <div className="flex items-center gap-2 mt-0.5">
-                <span className={`text-sm font-mono ${exp.current ? "text-cyan-400" : "text-zinc-400"}`}>
-                  {exp.company}
+    <div
+      ref={ref}
+      className="reveal relative pl-12"
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {/* Timeline dot */}
+      <div
+        className="absolute left-4 top-5 w-3 h-3 rounded-full border-2 flex-shrink-0"
+        style={{
+          borderColor: exp.color,
+          background: exp.current ? exp.color : "transparent",
+          boxShadow: exp.current ? `0 0 12px ${exp.color}` : "none",
+        }}
+      />
+
+      <div
+        className="p-6 mb-4 transition-all duration-300"
+        style={{
+          background: isDark ? "rgba(7,13,26,0.7)" : "rgba(255,255,255,0.85)",
+          border: `1px solid ${exp.current
+            ? isDark ? `${exp.color}30` : `${exp.color}40`
+            : isDark ? "rgba(0,245,255,0.08)" : "rgba(0,119,182,0.12)"
+          }`,
+          backdropFilter: "blur(12px)",
+          boxShadow: exp.current && isDark ? `0 0 40px ${exp.color}08` : "none",
+        }}
+      >
+        {/* Top row */}
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              {exp.current && (
+                <span
+                  className="text-[9px] mono px-2 py-0.5 font-semibold"
+                  style={{ background: `${exp.color}15`, color: exp.color, border: `1px solid ${exp.color}30` }}
+                >
+                  CURRENT
                 </span>
-              </div>
+              )}
+              <span
+                className="text-[9px] mono px-2 py-0.5"
+                style={{
+                  background: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+                  color: isDark ? "#8ba9c0" : "#2d5074",
+                  border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
+                }}
+              >
+                {exp.type}
+              </span>
+            </div>
+            <h3 className="text-lg font-bold" style={{ color: isDark ? "#e8f4fd" : "#0f2040" }}>{exp.role}</h3>
+            <div className="flex items-center gap-1 mt-0.5">
+              <Briefcase size={11} style={{ color: exp.color }} />
+              <span className="text-sm font-semibold" style={{ color: exp.color }}>{exp.company}</span>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {exp.current && (
-              <div className="flex items-center gap-1.5 border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-emerald-400 text-xs font-mono">active</span>
-              </div>
-            )}
-            <span className="text-zinc-600 text-xs font-mono border border-zinc-800 px-2 py-0.5">{exp.type}</span>
-            <span className="text-zinc-600 text-xs font-mono">{exp.period}</span>
+
+          <div className="text-right flex-shrink-0">
+            <div className="flex items-center gap-1 justify-end mb-1">
+              <Calendar size={10} style={{ color: isDark ? "#4a6580" : "#5a7a99" }} />
+              <span className="text-xs mono" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>{exp.period}</span>
+            </div>
+            <div className="flex items-center gap-1 justify-end">
+              <MapPin size={10} style={{ color: isDark ? "#4a6580" : "#5a7a99" }} />
+              <span className="text-xs mono" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>{exp.location}</span>
+            </div>
           </div>
         </div>
 
         {/* Bullets */}
         <ul className="space-y-2 mb-5">
           {exp.bullets.map((b, i) => (
-            <li key={i} className="flex items-start gap-2 text-zinc-400 text-sm">
-              <ChevronRight size={12} className="text-cyan-400 mt-1 flex-shrink-0" />
+            <li key={i} className="flex gap-2 text-xs leading-relaxed" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
+              <ChevronRight size={12} className="flex-shrink-0 mt-0.5" style={{ color: exp.color }} />
               {b}
             </li>
           ))}
@@ -92,7 +139,17 @@ function ExperienceCard({ exp, delay }) {
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5">
           {exp.tags.map((t) => (
-            <span key={t} className="tag">{t}</span>
+            <span
+              key={t}
+              className="text-[9px] mono px-2 py-0.5"
+              style={{
+                background: `${exp.color}08`,
+                color: isDark ? exp.color : exp.color,
+                border: `1px solid ${exp.color}20`,
+              }}
+            >
+              {t}
+            </span>
           ))}
         </div>
       </div>
@@ -100,24 +157,32 @@ function ExperienceCard({ exp, delay }) {
   );
 }
 
-export default function Experience() {
+export default function Experience({ theme }) {
+  const isDark = theme === "dark";
+
   return (
-    <section id="experience" className="py-24 px-6 max-w-6xl mx-auto">
+    <section id="experience" className="py-24 px-6 max-w-7xl mx-auto">
       <SectionHeader
-        label="// 03 — experience"
-        title="Work History"
-        subtitle="From front-end development to cloud infrastructure — my journey so far."
+        label="// work_history"
+        title="Experience"
+        subtitle="My professional journey — from front-end internships to DevOps and cloud."
+        theme={theme}
       />
 
       <div className="relative">
-        {/* Timeline line */}
-        <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-400/40 via-zinc-800 to-transparent hidden lg:block ml-4" />
+        {/* Vertical timeline line */}
+        <div
+          className="absolute left-[18px] top-6 bottom-6 w-px"
+          style={{
+            background: isDark
+              ? "linear-gradient(to bottom, rgba(0,245,255,0.4), transparent)"
+              : "linear-gradient(to bottom, rgba(0,119,182,0.3), transparent)",
+          }}
+        />
 
-        <div className="space-y-6 lg:pl-12">
-          {experiences.map((exp, i) => (
-            <ExperienceCard key={exp.company} exp={exp} delay={i * 0.15} />
-          ))}
-        </div>
+        {experiences.map((exp, i) => (
+          <ExpCard key={exp.company} exp={exp} delay={i * 100} theme={theme} />
+        ))}
       </div>
     </section>
   );

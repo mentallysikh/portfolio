@@ -1,108 +1,90 @@
 import { useReveal, SectionHeader } from "./useReveal";
-import { Mail, Github, Linkedin, MapPin, Send } from "lucide-react";
+import { Mail, Github, Linkedin, MapPin, Send, Globe } from "lucide-react";
 
 const contacts = [
-  { icon: Mail, label: "Email", value: "singhrandeep623@gmail.com", href: "mailto:singhrandeep623@gmail.com" },
-  { icon: Linkedin, label: "LinkedIn", value: "randeep-arora-1b336a105", href: "https://linkedin.com/in/randeep-arora-1b336a105" },
-  { icon: Github, label: "GitHub", value: "mentallysikh", href: "https://github.com/mentallysikh" },
-  { icon: MapPin, label: "Location", value: "Dwarka, New Delhi, India", href: null },
+  { icon: Mail,     label: "Email",     val: "singhrandeep623@gmail.com", href: "mailto:singhrandeep623@gmail.com", color: "#00f5ff" },
+  { icon: Linkedin, label: "LinkedIn",  val: "randeep-arora-1b336a105",   href: "https://linkedin.com/in/randeep-arora-1b336a105", color: "#00ff88" },
+  { icon: Github,   label: "GitHub",    val: "github.com/mentallysikh",   href: "https://github.com/mentallysikh", color: "#b97cff" },
+  { icon: Globe,    label: "Portfolio", val: "sikhomode.space",            href: "https://sikhomode.space", color: "#ff6b35" },
 ];
 
-export default function Contact() {
-  const r1 = useReveal();
-  const r2 = useReveal();
+export default function Contact({ theme }) {
+  const ref = useReveal();
+  const isDark = theme === "dark";
+
+  const card = isDark
+    ? "bg-[rgba(7,13,26,0.75)] border border-[rgba(0,245,255,0.1)] backdrop-blur-md"
+    : "bg-[rgba(255,255,255,0.85)] border border-[rgba(0,119,182,0.15)] backdrop-blur-md";
 
   return (
-    <section id="contact" className="py-24 px-6 max-w-6xl mx-auto">
+    <section id="contact" className="py-24 px-6 max-w-7xl mx-auto">
       <SectionHeader
-        label="// 06 — contact"
+        label="// contact"
         title="Get In Touch"
-        subtitle="Open to DevOps roles, cloud collaborations, and interesting projects."
+        subtitle="Open to DevOps roles, cloud projects, and collaborations. Let's build something."
+        theme={theme}
       />
 
-      <div className="grid lg:grid-cols-2 gap-12">
-        {/* Left */}
-        <div ref={r1} className="reveal space-y-5">
-          <div className="neon-border bg-zinc-900/50 p-6">
-            <div className="text-zinc-600 text-xs font-mono mb-4">// reach out</div>
-            <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-              Whether you have a DevOps role, a cloud project, or just want to talk tech —
-              my inbox is always open. I'll get back to you as quickly as I can.
-            </p>
-            <div className="space-y-3">
-              {contacts.map(({ icon: Icon, label, value, href }) => (
-                <div key={label} className="flex items-center gap-3">
-                  <div className="w-8 h-8 border border-zinc-700 bg-zinc-800/50 flex items-center justify-center flex-shrink-0">
-                    <Icon size={13} className="text-cyan-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-zinc-600 text-xs font-mono">{label}</div>
-                    {href ? (
-                      <a
-                        href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
-                        rel="noreferrer"
-                        className="text-zinc-300 text-sm hover:text-cyan-400 transition-colors truncate block"
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      <span className="text-zinc-300 text-sm">{value}</span>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+      <div ref={ref} className="reveal grid md:grid-cols-2 gap-6">
+        {/* Left: message */}
+        <div className={`${card} p-8`}>
+          <div className="sec-label mb-4">$ ./contact --send</div>
+          <h3 className="text-2xl font-black mb-3" style={{ color: isDark ? "#e8f4fd" : "#0f2040", letterSpacing: "-0.02em" }}>
+            Let's work together
+          </h3>
+          <p className="text-sm leading-relaxed mb-6" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
+            I'm a DevOps trainee actively building cloud skills and looking for opportunities to grow. Whether it's a full-time role, an internship extension, or a side project — I'm interested.
+          </p>
+          <p className="text-sm leading-relaxed mb-6" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
+            I'm based in <span style={{ color: isDark ? "#00f5ff" : "#0077b6" }} className="font-semibold">New Delhi</span> and open to both on-site and remote opportunities.
+          </p>
+
+          <div className="flex items-center gap-2 mb-6 px-4 py-3" style={{ background: isDark ? "rgba(0,255,136,0.06)" : "rgba(45,106,79,0.06)", border: `1px solid ${isDark ? "rgba(0,255,136,0.2)" : "rgba(45,106,79,0.2)"}` }}>
+            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <span className="text-xs mono" style={{ color: isDark ? "#00ff88" : "#2d6a4f" }}>Available for opportunities</span>
           </div>
 
-          {/* Status block */}
-          <div className="border border-emerald-500/30 bg-emerald-500/5 p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-emerald-400 text-xs font-mono">STATUS: OPEN TO OPPORTUNITIES</span>
-            </div>
-            <p className="text-zinc-500 text-xs font-mono">
-              Currently employed as DevOps Trainee @ CloudKeeper.
-              Open to learning-focused opportunities and collaborations.
-            </p>
+          <div className="flex items-center gap-2 text-xs mono" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>
+            <MapPin size={11} style={{ color: isDark ? "#00f5ff" : "#0077b6" }} />
+            Dwarka, New Delhi, India
           </div>
         </div>
 
-        {/* Right: quick CTA */}
-        <div ref={r2} className="reveal space-y-4" style={{ transitionDelay: "0.2s" }}>
-          <div className="neon-border bg-zinc-900/50 p-6 h-full flex flex-col justify-between">
-            <div>
-              <div className="text-zinc-600 text-xs font-mono mb-6">// quick links</div>
-              <div className="space-y-3">
-                {[
-                  { label: "→ View LinkedIn Profile", href: "https://linkedin.com/in/randeep-arora-1b336a105", primary: true },
-                  { label: "→ Browse GitHub Repos", href: "https://github.com/mentallysikh", primary: false },
-                  { label: "→ Send Email", href: "mailto:singhrandeep623@gmail.com", primary: false },
-                ].map(({ label, href, primary }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel="noreferrer"
-                    className={`flex items-center justify-between w-full px-4 py-3 font-mono text-sm transition-all duration-200 ${
-                      primary
-                        ? "bg-cyan-400 text-zinc-950 font-bold hover:bg-cyan-300"
-                        : "border border-zinc-700 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
-                    }`}
-                  >
-                    {label}
-                    <Send size={13} />
-                  </a>
-                ))}
+        {/* Right: contact cards */}
+        <div className="grid grid-cols-1 gap-3">
+          {contacts.map(({ icon: Icon, label, val, href, color }) => (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith("mailto") ? undefined : "_blank"}
+              rel="noreferrer"
+              className="flex items-center gap-4 p-4 transition-all duration-200 group"
+              style={{
+                background: isDark ? "rgba(7,13,26,0.6)" : "rgba(255,255,255,0.7)",
+                border: `1px solid ${isDark ? "rgba(0,245,255,0.08)" : "rgba(0,119,182,0.1)"}`,
+                backdropFilter: "blur(8px)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${color}35`;
+                e.currentTarget.style.transform = "translateX(4px)";
+                e.currentTarget.style.background = isDark ? `${color}06` : `${color}05`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = isDark ? "rgba(0,245,255,0.08)" : "rgba(0,119,182,0.1)";
+                e.currentTarget.style.transform = "none";
+                e.currentTarget.style.background = isDark ? "rgba(7,13,26,0.6)" : "rgba(255,255,255,0.7)";
+              }}
+            >
+              <div className="w-9 h-9 flex items-center justify-center flex-shrink-0" style={{ background: `${color}12`, border: `1px solid ${color}25` }}>
+                <Icon size={15} style={{ color }} />
               </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-zinc-800">
-              <div className="text-zinc-700 text-xs font-mono">
-                <span className="text-cyan-400">$</span> randeep --location "New Delhi" --available true --open-to "devops, cloud, infra"
+              <div className="min-w-0">
+                <div className="text-[10px] mono mb-0.5" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>{label}</div>
+                <div className="text-xs mono font-medium truncate" style={{ color: isDark ? "#e8f4fd" : "#0f2040" }}>{val}</div>
               </div>
-            </div>
-          </div>
+              <Send size={11} className="ml-auto flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color }} />
+            </a>
+          ))}
         </div>
       </div>
     </section>
