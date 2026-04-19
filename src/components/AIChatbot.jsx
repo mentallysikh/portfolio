@@ -55,7 +55,7 @@ const GEMINI_KEY = import.meta.env.VITE_GEMINI_KEY;
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Uses gemini-2.5-flash — free tier: 10 RPM, 250 RPD
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_KEY}`;
 
 export default function AIChatbot({ theme, onClose }) {
   const [messages, setMessages] = useState([
