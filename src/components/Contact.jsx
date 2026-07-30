@@ -33,7 +33,7 @@ export default function Contact({ theme }) {
             Let's work together
           </h3>
           <p className="text-sm leading-relaxed mb-6" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
-            I'm a DevOps trainee actively building cloud skills and looking for opportunities to grow. Whether it's a full-time role, an internship extension, or a side project — I'm interested.
+            I'm a DevOps engineer actively building cloud skills and looking for opportunities to grow. Whether it's a full-time role, an internship extension, or a side project — I'm interested.
           </p>
           <p className="text-sm leading-relaxed mb-6" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
             I'm based in <span style={{ color: isDark ? "#00f5ff" : "#0077b6" }} className="font-semibold">New Delhi</span> and open to both on-site and remote opportunities.

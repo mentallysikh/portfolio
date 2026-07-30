@@ -11,7 +11,7 @@ export default function About({ theme }) {
 
   const facts = [
     { icon: GraduationCap, color: "#00f5ff", title: "Education",  text: "MCA @ VIPS (2024–26)  ·  BCA @ MSIT — 9.0 CGPA (2021–24)" },
-    { icon: Briefcase,     color: "#00ff88", title: "Experience", text: "DevOps Trainee @ CloudKeeper  ·  Ex-VA @ Amazon  ·  Ex-FE Intern @ Appflix" },
+    { icon: Briefcase,     color: "#00ff88", title: "Experience", text: "DevOps Engineer @ CloudKeeper  ·  Ex-VA @ Amazon  ·  Ex-FE Intern @ Appflix" },
     { icon: Languages,     color: "#b97cff", title: "Languages",  text: "English & Hindi (Fluent)  ·  German 🇩🇪 (Beginner — actively learning)" },
     { icon: Zap,           color: "#ff6b35", title: "Currently",  text: "Kubernetes CKA · Terraform · AWS SA · GitHub Actions · Prometheus & Grafana" },
   ];
@@ -30,7 +30,7 @@ export default function About({ theme }) {
             <div className="sec-label mb-5">$ cat bio.txt</div>
 
             <p className="text-sm leading-loose mb-4" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>
-              I'm <span style={{ color: isDark ? "#e8f4fd" : "#0f2040" }} className="font-semibold">Randeep</span> — a DevOps trainee based in{" "}
+              I'm <span style={{ color: isDark ? "#e8f4fd" : "#0f2040" }} className="font-semibold">Randeep</span> — a DevOps engineer based in{" "}
               <span style={{ color: isDark ? "#00f5ff" : "#0077b6" }} className="font-semibold">New Delhi</span>, currently building real-world cloud skills at{" "}
               <span style={{ color: isDark ? "#00ff88" : "#2d6a4f" }} className="font-semibold">CloudKeeper</span>.
             </p>

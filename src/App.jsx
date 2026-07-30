@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar          from "./components/Navbar";
 import Hero            from "./components/Hero";
 import About           from "./components/About";
@@ -16,20 +17,28 @@ import AIChatbot       from "./components/AIChatbot";
 import "./index.css";
 import { MessageCircle } from "lucide-react";
 
-const SECTIONS = ["home","about","skills","experience","projects","certifications","contact"];
-
 export default function App() {
   const [theme,         setTheme]         = useState("dark");
-  const [activeSection, setActiveSection] = useState("home");
   const [scrollY,       setScrollY]       = useState(0);
   const [chatOpen,      setChatOpen]      = useState(false);
-  const [blogOpen,      setBlogOpen]      = useState(false);
   const [entered,       setEntered]       = useState(false);
+  
+  const location = useLocation();
+  const [visitedPages, setVisitedPages] = useState(new Set([location.pathname]));
+
   const isDark = theme === "dark";
 
   useEffect(() => { const t = setTimeout(() => setEntered(true), 60); return () => clearTimeout(t); }, []);
   useEffect(() => { const saved = localStorage.getItem("ra-theme") || "dark"; setTheme(saved); }, []);
   useEffect(() => { document.documentElement.classList.toggle("light-mode", theme === "light"); }, [theme]);
+  
+  useEffect(() => {
+    setVisitedPages(prev => {
+      const newSet = new Set(prev);
+      newSet.add(location.pathname);
+      return newSet;
+    });
+  }, [location.pathname]);
 
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
@@ -38,26 +47,29 @@ export default function App() {
   };
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrollY(window.scrollY);
-      for (const id of SECTIONS) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 130 && rect.bottom >= 130) { setActiveSection(id); break; }
-        }
-      }
-    };
+    const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Map pathname to active nav item
+  const activePathMap = {
+    "/": "home",
+    "/skills": "skills",
+    "/experience": "experience",
+    "/projects": "projects",
+    "/certifications": "certifications",
+    "/contact": "contact",
+    "/blog": "blog"
+  };
+  const activeSection = activePathMap[location.pathname] || "home";
+
   return (
-    <div className="min-h-screen overflow-x-hidden noise-bg transition-colors duration-500"
+    <div className="min-h-screen overflow-x-hidden noise-bg transition-colors duration-500 flex flex-col"
       style={{ background: "var(--bg-0)", color: "var(--text-1)" }}>
 
       <CustomCursor theme={theme} />
-      <ScrollProgress />
+      <ScrollProgress visitedCount={visitedPages.size} totalPages={7} />
       <ParticleField theme={theme} />
       <div className="fixed inset-0 grid-bg pointer-events-none z-0" />
       <div className="orb orb-1 z-0" />
@@ -67,23 +79,21 @@ export default function App() {
       <Navbar
         active={activeSection} scrollY={scrollY}
         theme={theme} toggleTheme={toggleTheme}
-        onBlogOpen={() => setBlogOpen(true)}
       />
 
-      <main className={`relative z-10 ${entered ? "page-enter" : "opacity-0"}`}>
-        <Hero         theme={theme} />
-        <About        theme={theme} />
-        <Skills       theme={theme} />
-        <Experience   theme={theme} />
-        <Projects     theme={theme} />
-        <Certifications theme={theme} />
-        <Contact      theme={theme} />
+      <main className={`relative z-10 flex-grow pt-10 ${entered ? "page-enter" : "opacity-0"}`}>
+        <Routes>
+          <Route path="/" element={<><Hero theme={theme} /><About theme={theme} /></>} />
+          <Route path="/skills" element={<Skills theme={theme} />} />
+          <Route path="/experience" element={<Experience theme={theme} />} />
+          <Route path="/projects" element={<Projects theme={theme} />} />
+          <Route path="/certifications" element={<Certifications theme={theme} />} />
+          <Route path="/contact" element={<Contact theme={theme} />} />
+          <Route path="/blog" element={<Blog theme={theme} />} />
+        </Routes>
       </main>
 
       <Footer theme={theme} />
-
-      {/* Blog drawer */}
-      <Blog theme={theme} open={blogOpen} onClose={() => setBlogOpen(false)} />
 
       {/* AI chat */}
       {!chatOpen && (

@@ -3,7 +3,7 @@ import { Briefcase, MapPin, Calendar, ChevronRight } from "lucide-react";
 
 const experiences = [
   {
-    role: "DevOps Trainee",
+    role: "DevOps Engineer",
     company: "CloudKeeper",
     period: "2026 – Present",
     location: "New Delhi, India",

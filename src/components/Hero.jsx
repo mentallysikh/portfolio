@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MapPin, Mail, Github, Linkedin, Cloud, Server, GitBranch, Cpu, Globe, Download, Copy, Check, Terminal } from "lucide-react";
 
 const roles = [
-  "DevOps Trainee @ CloudKeeper",
+  "DevOps Engineer @ CloudKeeper",
   "Cloud Infrastructure Builder",
   "Docker & Kubernetes Explorer",
   "CI/CD Pipeline Engineer",
@@ -24,7 +24,7 @@ const TERM_LINES = [
   { delay: 300,  text: "$ whoami",                      color: "#00f5ff" },
   { delay: 900,  text: "randeep-arora",                 color: "#e8f4fd" },
   { delay: 1400, text: "$ cat current_role.txt",        color: "#00f5ff" },
-  { delay: 2000, text: "DevOps Trainee @ CloudKeeper",  color: "#00ff88" },
+  { delay: 2000, text: "DevOps Engineer @ CloudKeeper",  color: "#00ff88" },
   { delay: 2500, text: "$ echo $STATUS",                color: "#00f5ff" },
   { delay: 3100, text: "open_to_opportunities=true ✓",  color: "#b97cff" },
 ];
@@ -219,7 +219,7 @@ useEffect(() => {
               <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
               <span className="mono text-[10px]" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>// current_status</span>
             </div>
-            <div className="font-bold text-sm mb-1" style={{ color: isDark ? "#e8f4fd" : "#0f2040" }}>DevOps Trainee @ CloudKeeper</div>
+            <div className="font-bold text-sm mb-1" style={{ color: isDark ? "#e8f4fd" : "#0f2040" }}>DevOps Engineer @ CloudKeeper</div>
             <div className="text-xs mono mb-3" style={{ color: isDark ? "#8ba9c0" : "#2d5074" }}>New Delhi · 2026–Present</div>
             <div className="flex flex-wrap gap-1">
               {["AWS", "GCP", "Docker", "K8s", "CI/CD"].map((t) => (
@@ -265,10 +265,6 @@ useEffect(() => {
         </div>
       </div>
 
-      <div className="mt-16 flex items-center gap-3 text-xs mono fade-up" style={{ animationDelay: "0.7s", color: isDark ? "#4a6580" : "#5a7a99" }}>
-        <div className="w-px h-8" style={{ background: "linear-gradient(to bottom, transparent, var(--cyan))" }} />
-        scroll to explore
-      </div>
     </section>
   );
 }

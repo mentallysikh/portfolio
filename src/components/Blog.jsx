@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Clock, ChevronRight, BookOpen, Lock, Plus, Trash2, Eye, EyeOff, Save, LogOut, PenLine, ArrowLeft } from "lucide-react";
+import { useReveal, SectionHeader } from "./useReveal";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ADMIN PASSWORD — default is: randeep2026
@@ -302,7 +303,7 @@ function AdminEditor({ theme, onSave, onCancel }) {
           <label className="text-[10px] mono block mb-1.5" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>Tags (comma separated)</label>
           <input value={tags} onChange={(e) => setTags(e.target.value)} placeholder="Docker, DevOps, Linux" className={inp} />
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="text-[10px] mono block mb-1.5" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>Read time</label>
             <input value={readTime} onChange={(e) => setReadTime(e.target.value)} placeholder="5 min" className={inp} />
@@ -349,13 +350,14 @@ function AdminEditor({ theme, onSave, onCancel }) {
   );
 }
 
-// ── Main Blog Drawer ──────────────────────────────────────────────────────────
-export default function Blog({ theme, open, onClose }) {
+// ── Main Blog Page ──────────────────────────────────────────────────────────
+export default function Blog({ theme }) {
   const [posts,     setPosts]     = useState(loadPosts);
   const [reading,   setReading]   = useState(null);
   // adminView: false | "login" | "list" | "editor"
   const [adminView, setAdminView] = useState(false);
   const isDark = theme === "dark";
+  const ref = useReveal();
 
   const handleLogin      = () => setAdminView("list");
   const handleLogout     = () => setAdminView(false);
@@ -379,44 +381,25 @@ export default function Blog({ theme, open, onClose }) {
       if (reading) { setReading(null); return; }
       if (adminView === "login") { setAdminView(false); return; }
       if (adminView === "editor") { setAdminView("list"); return; }
-      onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [reading, adminView, onClose]);
-
-  // Lock body scroll
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
-
-  if (!open) return null;
+  }, [reading, adminView]);
 
   const showHeader = !reading && adminView !== "editor" && adminView !== "login";
 
   return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-[400]"
-        style={{ background: "rgba(2,4,9,0.7)", backdropFilter: "blur(6px)" }}
-        onClick={() => {
-          if (reading) { setReading(null); return; }
-          if (adminView === "login") { setAdminView(false); return; }
-          onClose();
-        }}
-      />
-
-      {/* Drawer */}
-      <div
-        className="fixed top-0 right-0 h-full z-[401] flex flex-col"
+    <section className="py-16 sm:py-24 px-4 sm:px-6 max-w-5xl mx-auto h-[calc(100dvh-5rem)] min-h-[600px] flex flex-col">
+      <div ref={ref} className="reveal flex-1 flex flex-col pb-10">
+        <SectionHeader label="// my_thoughts" title="Blog" theme={theme} />
+        
+        <div
+          className="flex-1 flex flex-col rounded-sm overflow-hidden mt-8"
         style={{
-          width: "min(680px, 100vw)",
-          background: isDark ? "#070d1a" : "#f8fafc",
-          borderLeft: `1px solid ${isDark ? "rgba(0,245,255,0.12)" : "rgba(0,119,182,0.15)"}`,
-          boxShadow: "-20px 0 60px rgba(0,0,0,0.4)",
-          animation: "slideInRight 0.3s cubic-bezier(0.22,1,0.36,1) forwards",
+          background: isDark ? "rgba(7,13,26,0.75)" : "rgba(255,255,255,0.85)",
+          border: `1px solid ${isDark ? "rgba(0,245,255,0.12)" : "rgba(0,119,182,0.15)"}`,
+          boxShadow: isDark ? "0 10px 40px rgba(0,0,0,0.5)" : "0 10px 40px rgba(0,0,0,0.05)",
+          backdropFilter: "blur(12px)",
         }}
       >
         {/* Header — shown on public and admin list views */}
@@ -424,7 +407,7 @@ export default function Blog({ theme, open, onClose }) {
           <div className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0"
             style={{ borderColor: isDark ? "rgba(0,245,255,0.08)" : "rgba(0,119,182,0.1)" }}>
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 flex items-center justify-center"
+              <div className="w-7 h-7 flex items-center justify-center rounded-sm"
                 style={{ background: "rgba(0,245,255,0.08)", border: "1px solid rgba(0,245,255,0.2)" }}>
                 <BookOpen size={13} className="text-[#00f5ff]" />
               </div>
@@ -437,7 +420,7 @@ export default function Blog({ theme, open, onClose }) {
               {adminView === "list" && (
                 <>
                   <button onClick={() => setAdminView("editor")}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] mono border transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] mono border transition-colors rounded-sm"
                     style={{ borderColor: "rgba(0,245,255,0.25)", color: "#00f5ff" }}>
                     <Plus size={10} /> New Post
                   </button>
@@ -454,9 +437,6 @@ export default function Blog({ theme, open, onClose }) {
                   <Lock size={13} />
                 </button>
               )}
-              <button onClick={onClose} className="p-1.5 transition-colors" style={{ color: isDark ? "#4a6580" : "#5a7a99" }}>
-                <X size={16} />
-              </button>
             </div>
           </div>
         )}
@@ -491,6 +471,7 @@ export default function Blog({ theme, open, onClose }) {
           )}
         </div>
       </div>
-    </>
+      </div>
+    </section>
   );
 }

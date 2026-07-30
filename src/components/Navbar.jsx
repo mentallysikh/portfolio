@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Sun, Moon, Download, Menu, X, FileText } from "lucide-react";
 
 const links = [
-  { id: "home",           label: "home" },
-  { id: "about",          label: "about" },
-  { id: "skills",         label: "skills" },
-  { id: "experience",     label: "experience" },
-  { id: "projects",       label: "projects" },
-  { id: "certifications", label: "certs" },
-  
-  { id: "contact",        label: "contact" },
+  { id: "home",           label: "home",        path: "/" },
+  { id: "skills",         label: "skills",      path: "/skills" },
+  { id: "experience",     label: "experience",  path: "/experience" },
+  { id: "projects",       label: "projects",    path: "/projects" },
+  { id: "certifications", label: "certs",       path: "/certifications" },
+  { id: "contact",        label: "contact",     path: "/contact" },
 ];
 
-export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen }) {
+export default function Navbar({ active, scrollY, theme, toggleTheme }) {
   const scrolled = scrollY > 60;
   const isDark = theme === "dark";
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setMobileOpen(false);
-  };
 
   // Resume download handler — reads from /public/resume.pdf
   const handleResumeDownload = () => {
@@ -59,7 +53,7 @@ export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navBg}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <button onClick={() => scrollTo("home")} className="flex items-center gap-3 group">
+        <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 group">
           <div
             className="w-9 h-9 flex items-center justify-center text-xs font-bold font-mono transition-all duration-300"
             style={{
@@ -75,14 +69,14 @@ export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen
             <span className={`text-xs font-bold ${isDark ? "text-[#e8f4fd]" : "text-[#0f2040]"}`}>randeep arora</span>
             <span className={`text-[10px] mono ${isDark ? "text-[#4a6580]" : "text-[#5a7a99]"}`}>devops trainee</span>
           </div>
-        </button>
+        </Link>
 
         {/* Desktop nav links */}
         <div className="hidden lg:flex items-center gap-0.5">
           {links.map((l) => (
-            <button
+            <Link
               key={l.id}
-              onClick={() => scrollTo(l.id)}
+              to={l.path}
               className={`px-3 py-1.5 text-[11px] font-medium mono transition-all duration-200 relative ${
                 active === l.id
                   ? textActive
@@ -96,15 +90,23 @@ export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen
                 />
               )}
               {active === l.id ? `> ${l.label}` : l.label}
-            </button>
+            </Link>
           ))}
-          {/* Blog opens as drawer */}
-          <button
-            onClick={onBlogOpen}
-            className={`px-3 py-1.5 text-[11px] font-medium mono transition-all duration-200 ${textMuted} ${textHover}`}
+          {/* Blog page link */}
+          <Link
+            to="/blog"
+            className={`px-3 py-1.5 text-[11px] font-medium mono transition-all duration-200 ${
+              active === "blog" ? textActive : `${textMuted} ${textHover}`
+            }`}
           >
-            blog
-          </button>
+            {active === "blog" && (
+              <span
+                className="absolute inset-x-2 bottom-0 h-px rounded-full"
+                style={{ background: isDark ? "#00f5ff" : "#0077b6", boxShadow: isDark ? "0 0 6px #00f5ff" : "none" }}
+              />
+            )}
+            {active === "blog" ? `> blog` : `blog`}
+          </Link>
         </div>
 
         {/* Right controls */}
@@ -153,9 +155,10 @@ export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen
           }`}
         >
           {links.map((l) => (
-            <button
+            <Link
               key={l.id}
-              onClick={() => scrollTo(l.id)}
+              to={l.path}
+              onClick={() => setMobileOpen(false)}
               className={`block w-full text-left px-3 py-2.5 text-sm mono transition-colors rounded-sm ${
                 active === l.id
                   ? isDark ? "text-[#00f5ff] bg-[rgba(0,245,255,0.05)]" : "text-[#0077b6] bg-[rgba(0,119,182,0.05)]"
@@ -163,14 +166,19 @@ export default function Navbar({ active, scrollY, theme, toggleTheme, onBlogOpen
               }`}
             >
               {active === l.id ? `> ${l.label}` : `  ${l.label}`}
-            </button>
+            </Link>
           ))}
-          <button
-            onClick={() => { onBlogOpen(); setMobileOpen(false); }}
-            className={`block w-full text-left px-3 py-2.5 text-sm mono transition-colors rounded-sm ${textMuted} ${textHover}`}
+          <Link
+            to="/blog"
+            onClick={() => setMobileOpen(false)}
+            className={`block w-full text-left px-3 py-2.5 text-sm mono transition-colors rounded-sm ${
+              active === "blog"
+                ? isDark ? "text-[#00f5ff] bg-[rgba(0,245,255,0.05)]" : "text-[#0077b6] bg-[rgba(0,119,182,0.05)]"
+                : `${textMuted} ${textHover}`
+            }`}
           >
-            {"  "}blog
-          </button>
+            {active === "blog" ? `> blog` : `  blog`}
+          </Link>
           <div className="pt-3 border-t mt-2" style={{ borderColor: isDark ? "rgba(0,245,255,0.08)" : "rgba(0,119,182,0.12)" }}>
             <button
               onClick={handleResumeDownload}

@@ -8,7 +8,7 @@ Name: Randeep Singh Arora | Location: Dwarka, New Delhi, India
 Email: singhrandeep623@gmail.com | LinkedIn: linkedin.com/in/randeep-arora-1b336a105
 GitHub: github.com/mentallysikh | Portfolio: sikhomode.space
 
-CURRENT ROLE: DevOps Trainee @ CloudKeeper (2026–Present)
+CURRENT ROLE: DevOps Engineer @ CloudKeeper (2026–Present)
 • AWS & GCP (EC2, S3, IAM, compute, storage)
 • Docker containerization & Kubernetes orchestration basics
 • CI/CD pipelines, version control, deployment workflows

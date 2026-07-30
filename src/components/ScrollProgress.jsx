@@ -1,23 +1,10 @@
-import { useEffect, useState } from "react";
-
-export default function ScrollProgress() {
-  const [pct, setPct] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const el = document.documentElement;
-      const scrolled = el.scrollTop || document.body.scrollTop;
-      const total = el.scrollHeight - el.clientHeight;
-      setPct(total ? (scrolled / total) * 100 : 0);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+export default function ScrollProgress({ visitedCount = 0, totalPages = 1 }) {
+  const pct = totalPages > 0 ? (visitedCount / totalPages) * 100 : 0;
 
   return (
     <div
       className="progress-bar"
-      style={{ width: `${pct}%` }}
+      style={{ width: `${pct}%`, transition: "width 0.5s ease-out" }}
     />
   );
 }
